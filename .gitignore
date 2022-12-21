@@ -2,6 +2,7 @@ data
 junk.ipynb
 saved
 wandb
+generated
 .DS_Store
 
 # Byte-compiled / optimized / DLL files

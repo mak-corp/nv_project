@@ -8,7 +8,8 @@ import torch.nn.functional as F
 import itertools
 
 from .base_model import BaseModel
-from .modules import *
+from .discriminator import MultiPeriodDiscriminator, MultiScaleDiscriminator
+from .generator import Generator
 from .wav_to_mel import MelSpectrogram
 
 from nv_lib.utils import MetricTracker
