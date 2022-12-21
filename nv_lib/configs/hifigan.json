@@ -5,20 +5,19 @@
     "type": "HiFiGAN",
     "args": {
       "learning_rate": 2e-4,
-      "lr_decay": 0.99
+      "lr_decay": 0.999
     }
   },
   "data": {
     "train": {
       "num_workers": 8,
-      "batch_size": 20,
+      "batch_size": 60,
       "datasets": [
         {
           "type": "WavDataset",
           "args": {
             "wav_dir": "./data/LJSpeech-1.1/wavs",
-            "max_wav_len": 8192,
-            "preload": true
+            "max_wav_len": 8192
           }
         }
       ]

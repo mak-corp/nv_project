@@ -74,7 +74,7 @@ class Generator(torch.nn.Module):
 
         resblock_kernel_sizes = [3,7,11]
         resblock_dilation_sizes = [[1,3,5], [1,3,5], [1,3,5]]
-        upsample_in_channels = 512
+        upsample_in_channels = 128
         upsample_rates = [8,8,2,2]
         upsample_kernel_sizes = [16,16,4,4]
 
