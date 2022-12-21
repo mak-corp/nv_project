@@ -10,8 +10,8 @@
   },
   "data": {
     "train": {
-      "num_workers": 8,
-      "batch_size": 60,
+      "num_workers": 16,
+      "batch_size": 16,
       "datasets": [
         {
           "type": "WavDataset",

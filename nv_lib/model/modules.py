@@ -74,7 +74,7 @@ class Generator(torch.nn.Module):
 
         resblock_kernel_sizes = [3,7,11]
         resblock_dilation_sizes = [[1,3,5], [1,3,5], [1,3,5]]
-        upsample_in_channels = 128
+        upsample_in_channels = 512  # 128
         upsample_rates = [8,8,2,2]
         upsample_kernel_sizes = [16,16,4,4]
 
@@ -165,7 +165,6 @@ class MultiPeriodDiscriminator(torch.nn.Module):
 class ScaleDiscriminator(torch.nn.Module):
     def __init__(self, use_spectral_norm=False):
         super(ScaleDiscriminator, self).__init__()
-        self.meanpool = nn.Identity() if use_spectral_norm else AvgPool1d(4, 2, padding=2)
         norm_f = spectral_norm if use_spectral_norm else weight_norm
         self.convs = nn.ModuleList([
             norm_f(Conv1d(1, 128, 15, 1, padding=7)),
@@ -179,7 +178,6 @@ class ScaleDiscriminator(torch.nn.Module):
         self.conv_post = norm_f(Conv1d(1024, 1, 3, 1, padding=1))
 
     def forward(self, x):
-        x = self.meanpool(x)
         features = []
         for conv in self.convs:
             x = conv(x)
@@ -200,14 +198,17 @@ class MultiScaleDiscriminator(torch.nn.Module):
             ScaleDiscriminator(),
             ScaleDiscriminator(),
         ])
+        self.pooling = AvgPool1d(4, 2, padding=2)
 
     def forward(self, x):
         score = []
         features = []
         x = x.view(x.shape[0], 1, -1)
-        for discriminator in self.discriminators:
+        for i, discriminator in enumerate(self.discriminators):
             f_score, f_features = discriminator(x)
             score.append(f_score)
             features.append(f_features)
+            if i + 1 < len(self.discriminators):
+                x = self.pooling(x)
 
         return score, features
