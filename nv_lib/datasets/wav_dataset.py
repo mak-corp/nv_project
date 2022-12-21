@@ -16,7 +16,7 @@ class WavDataset(Dataset):
 
         if preload:
             self.preloaded_wavs = []
-            for name in self.names:
+            for name in tqdm(self.names):
                 wav, _ = librosa.load(os.path.join(self.wav_dir, f"{name}.wav"))
                 wav = torch.from_numpy(wav)
                 self.preloaded_wavs.append(wav)
