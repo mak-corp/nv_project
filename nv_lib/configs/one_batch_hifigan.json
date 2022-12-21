@@ -1,0 +1,55 @@
+{
+  "name": "one_batch_hifigan",
+  "n_gpu": -1,
+  "arch": {
+    "type": "HiFiGAN",
+    "args": {
+      "learning_rate": 2e-4,
+      "lr_decay": 0.99
+    }
+  },
+  "data": {
+    "train": {
+      "num_workers": 8,
+      "batch_size": 10,
+      "datasets": [
+        {
+          "type": "WavDataset",
+          "args": {
+            "wav_dir": "./data/LJSpeech-1.1/wavs",
+            "max_wav_len": 8192,
+            "limit": 10
+          }
+        }
+      ]
+    },
+    "test": {
+      "batch_size": 1,
+      "num_workers": 0,
+      "shuffle": false,
+      "drop_last": false,
+      "datasets": [
+        {
+          "type": "WavDataset",
+          "args": {
+            "wav_dir": "./test_data/wavs",
+            "preload": true
+          }
+        }
+      ]
+    }
+  },
+  "trainer": {
+    "epochs": 50,
+    "log_step": 50,
+    "save_dir": "saved/",
+    "save_period": 5,
+    "verbosity": 2,
+    "monitor": "min g_loss",
+    "early_stop": 100,
+    "visualize": "wandb",
+    "wandb_project": "nv_project",
+    "len_epoch": 1,
+    "grad_norm_clip": 10.0
+  }
+}
